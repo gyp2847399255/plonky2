@@ -313,6 +313,7 @@ pub fn benchmark_function(
         2 => "multiple lookups proof",
         _ => "proof",
     };
+    println!("{}", name);
     // Start with a dummy proof of specified size
     let inner = dummy_proof_function(config, log2_inner_size)?;
     let (_, _, common_data) = &inner;

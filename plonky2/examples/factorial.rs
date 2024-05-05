@@ -19,7 +19,7 @@ fn main() -> Result<()> {
     // The arithmetic circuit.
     let initial = builder.add_virtual_target();
     let mut cur_target = initial;
-    for i in 2..101 {
+    for i in 2..100 {
         let i_target = builder.constant(F::from_canonical_u32(i));
         cur_target = builder.mul(cur_target, i_target);
     }
