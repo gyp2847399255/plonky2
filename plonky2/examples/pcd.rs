@@ -8,21 +8,20 @@ extern crate alloc;
 
 #[cfg(not(feature = "std"))]
 use alloc::sync::Arc;
-#[cfg(feature = "std")]
-use std::sync::Arc;
-use std::time::SystemTime;
 
-use anyhow::{anyhow, Context as _, Result};
-use itertools::Itertools;
-use log::{info, Level, LevelFilter};
-use plonky2::gadgets::lookup::TIP5_TABLE;
-use plonky2::gates::noop::NoopGate;
+
+
+use anyhow::{Result};
+
+use log::{Level};
+
+
 use plonky2::hash::hash_types::RichField;
 use plonky2::iop::witness::{PartialWitness, WitnessWrite};
 use plonky2::plonk::circuit_builder::CircuitBuilder;
 use plonky2::plonk::circuit_data::{CircuitConfig, CommonCircuitData, VerifierOnlyCircuitData};
 use plonky2::plonk::config::{AlgebraicHasher, GenericConfig, PoseidonGoldilocksConfig};
-use plonky2::plonk::proof::{CompressedProofWithPublicInputs, ProofWithPublicInputs};
+use plonky2::plonk::proof::{ProofWithPublicInputs};
 use plonky2::plonk::prover::prove;
 use plonky2::util::timing::TimingTree;
 use plonky2_field::extension::Extendable;
@@ -111,9 +110,6 @@ pub fn benchmark_function(config: &CircuitConfig) -> Result<()> {
     let middle = ivc::<F, C, C, D>(&inner, config)?;
     println!("{:?}", middle.0.public_inputs);
 
-    // Add a second layer of recursion to shrink the proof size further
-    // let outer = recursive_proof::<F, C, C, D>(&middle, config, None)?;
-    // println!("{:?}", outer.0.public_inputs);
 
     Ok(())
 }
