@@ -10,7 +10,6 @@ extern crate alloc;
 use alloc::sync::Arc;
 
 use anyhow::Result;
-use itertools::min;
 use log::Level;
 use plonky2::hash::hash_types::RichField;
 use plonky2::iop::witness::{PartialWitness, WitnessWrite};
