@@ -20,6 +20,7 @@ use plonky2::plonk::proof::ProofWithPublicInputs;
 use plonky2::plonk::prover::prove;
 use plonky2::util::timing::TimingTree;
 use plonky2_field::extension::Extendable;
+use web_time::SystemTime;
 
 type ProofTuple<F, C, const D: usize> = (
     ProofWithPublicInputs<F, C, D>,
@@ -140,18 +141,31 @@ pub fn benchmark_function(config: &CircuitConfig) -> Result<()> {
     const D: usize = 2;
     type C = PoseidonGoldilocksConfig;
     type F = <C as GenericConfig<D>>::F;
+    let time = SystemTime::now();
 
     // Start with a dummy proof of specified size
-    let proof1_1 = start(config)?;
-    println!("{:?}", proof1_1.0.public_inputs);
-    // Recursively verify the proof
-    let proof1_2 = increment::<F, C, D>(&proof1_1, config)?;
-    println!("{:?}", proof1_2.0.public_inputs);
+    let mut proof1 = start(config)?;
+    println!("{:?}, using {} seconds", proof1.0.public_inputs, time.elapsed().unwrap().as_secs());
 
-    let proof2_1 = start(config)?;
-    let proof2_2 = select_max(&proof2_1, &proof1_2, config)?;
-    println!("{:?}", proof2_2.0.public_inputs);
+    for _ in 0..20 {
+        proof1 = increment::<F, C, D>(&proof1, config)?;
+        println!("{:?}, using {} seconds", proof1.0.public_inputs, time.elapsed().unwrap().as_secs());
+    }
 
+    let mut proof2 = start(config)?;
+    println!("{:?}, using {} seconds", proof2.0.public_inputs, time.elapsed().unwrap().as_secs());
+
+    for _ in 0..30 {
+        proof2 = increment::<F, C, D>(&proof2, config)?;
+        println!("{:?}, using {} seconds", proof2.0.public_inputs, time.elapsed().unwrap().as_secs());
+    }
+
+    let mut proof = select_max(&proof1, &proof2, config)?;
+    println!("{:?}, using {} seconds", proof.0.public_inputs, time.elapsed().unwrap().as_secs());
+    for _ in 0..10 {
+        proof = increment::<F, C, D>(&proof, config)?;
+        println!("{:?}, using {} seconds", proof.0.public_inputs, time.elapsed().unwrap().as_secs());
+    }
     Ok(())
 }
 
