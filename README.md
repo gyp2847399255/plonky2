@@ -96,3 +96,7 @@ Plonky2's default hash function is Poseidon, configured with 8 full rounds, 22 p
 - [Insertion](https://github.com/0xPolygonZero/plonky2-insertion), Plonky2 gadgets for insertion into a list
 - [u32](https://github.com/0xPolygonZero/plonky2-u32), Plonky2 gadgets for u32 arithmetic
 - [ECDSA](https://github.com/0xPolygonZero/plonky2-ecdsa), Plonky2 gadgets for the ECDSA algorithm
+
+## Benches
+
+`RAYON_NUM_THREADS=1 cargo bench mock`
