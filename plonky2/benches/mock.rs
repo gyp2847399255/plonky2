@@ -7,7 +7,7 @@ use plonky2::plonk::config::{GenericConfig, PoseidonGoldilocksConfig};
 use plonky2_field::types::Sample;
 
 fn main() {
-    bench_mock_circuit(18, 5);
+    bench_mock_circuit(26, 1);
 }
 
 fn bench_mock_circuit(nv: usize, repetition: usize) {
@@ -30,7 +30,11 @@ fn bench_mock_circuit(nv: usize, repetition: usize) {
     for _ in 0..repetition {
         let _ = data.prove(pw.clone()).unwrap();
     }
-    println!("proving for 2^{} gates: {} us", nv, start.elapsed().as_micros() / repetition as u128);
+    println!(
+        "proving for 2^{} gates: {} us",
+        nv,
+        start.elapsed().as_micros() / repetition as u128
+    );
     let proof = data.prove(pw).unwrap();
 
     data.verify(proof).unwrap();
